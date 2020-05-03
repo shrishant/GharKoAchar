@@ -1,0 +1,20 @@
+.headerComponent{
+    width: 1332px;
+    margin:0 auto;
+    background-color: #333333;
+    overflow: hidden;
+    color: white;
+    display: flex;
+    flex-direction: row;;
+    font-size: 9px;
+    line-height: 29px;
+}
+.InnerHeaderComponent{
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    width: 376px;
+}
+.InnerHeaderComponent > .itmes{
+    margin-right: 39px;
+}

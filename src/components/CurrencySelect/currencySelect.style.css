@@ -1,0 +1,12 @@
+.Currency{
+    width: 382px;
+    margin-left: 288px;
+}
+
+#curr, .options{
+    background-color: #333333;
+    color:white;
+    border:none;
+    width:40px;
+}
+
