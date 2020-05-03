@@ -6,7 +6,7 @@ class HeaderCart extends Component {
     render() { 
         return ( 
             <div className="headerCart">
-                <i class="fa fa-shopping-cart"></i>
+                <i className="fa fa-shopping-cart"></i>
                 <select className="selectOptions">
                 <option value="empty">Empty</option>
                 <option value="add">Add</option>
