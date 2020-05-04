@@ -1,0 +1,13 @@
+.group{
+        display:grid;
+        margin:10px auto;
+    .form-input-label{
+        width:30%;
+        font-weight:bolder;
+        font-size:20px;
+    }
+    .form-input{
+        padding: 6px;
+        font-size: 14px;
+    }
+}

@@ -5,7 +5,7 @@ import history from 'utils/history';
 import MainPage from './MainPage/MainPage.component'
 import * as routes from 'constants/routes';
 import Header from './headercomponent/header.component';
-
+import EnterUserDetails from './EnterUserDetails/EnterUserDetails.components';
 
 import PrivateRoute from './common/routes/PrivateRoute';
 
@@ -15,6 +15,7 @@ const Router = () => (
     <Header/>
     <Switch>
     <Route exact path="/" component={MainPage} />
+    <Route exact path='/EnterUserDetails' component={EnterUserDetails}/>
     </Switch>
   </BrowserRouter>
 );
