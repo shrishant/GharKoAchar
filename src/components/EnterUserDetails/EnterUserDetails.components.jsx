@@ -28,7 +28,7 @@ class EnterUserDetails extends Component {
         db.settings({
             timestampsInSnapshots: true
         });
-        const userRef = db.collection('users').add({
+        const userRef = db.collection('users').doc(this.state.Number).set({
             Name: this.state.Name,
             Surname: this.state.Surname,
             Number: this.state.Number,

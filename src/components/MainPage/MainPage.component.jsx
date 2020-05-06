@@ -20,7 +20,6 @@ class MainPage extends Component {
             .then((snapshot) => {
             snapshot.forEach((doc) => {
               Customers.push(doc.data())
-              console.log(doc.data())
               this.setState({
                 Customer:Customers,
                 searchValue: ''
@@ -30,12 +29,10 @@ class MainPage extends Component {
             .catch((err) => {
               console.log('Error getting documents', err);
             });
-            console.log(this.state);
       }
 
        handleChange=(e) => {
         this.setState({searchValue : e.target.value}) 
-        console.log(e.target.value)
       }
 
     render() {

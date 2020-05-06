@@ -6,9 +6,39 @@
     border-radius: 5%;
     padding: 10px;
     text-align: left;
+    position:relative;
+
+
+    .DeleteButton{
+      position: absolute;
+      top:25%;
+      left:25%;
+      display:none;
+      font-size:58px;
+      color:red;
+      cursor: pointer;
+      
+    }
+
+    .updatedata{
+      position:absolute;
+      top:25%;
+      left:55%;
+      display:none;
+      font-size:58px;
+      color:red;
+      cursor: pointer;
+    }
   }
   
   .card-container:hover {
     transform: scale(1.25);
+    background-color:rgba(61, 57, 57, 0.952);
+    .DeleteButton{
+      display:inline-flex;
+    }
+    .updatedata{
+      display:flex;
+    }
   }
   
