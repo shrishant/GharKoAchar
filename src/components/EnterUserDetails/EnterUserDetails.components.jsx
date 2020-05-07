@@ -5,16 +5,18 @@ import CustomButton from '../CustomButton/custombutton.component';
 import firebase from "../../firebase";
 
 class EnterUserDetails extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = { 
             Name:'',
             Surname:'',
             Number:'' ,
             Address :"",
             Bought:"",
-            Reviews:""
-         }
+            Reviews:"",
+            bool:0
+         } //  console.log(props.location.state)
+         console.log(props)
     }
 
     handleUpdate = e => {
@@ -22,6 +24,33 @@ class EnterUserDetails extends Component {
           [e.target.name]: e.target.value
         });
       }
+
+      UpdateUser =e =>{
+          e.preventDefault();
+          const db = firebase.firestore();
+          db.settings({
+              timestampsInSnapshots: true
+          });
+
+          let Ref = db.collection('users').doc(this.state.Number);
+            let updateSingle = Ref.update({
+                Name: this.state.Name,
+                Surname: this.state.Surname,
+                Number: this.state.Number,
+                Address: this.state.Address,
+                Bought: this.state.Bought,
+                Reviews: this .state.Reviews
+            });
+            this.setState({
+                Name:'',
+                Surname:'',
+                Number:'' ,
+                Address :"",
+                Bought:"",
+                Reviews:""
+            });
+      }
+
       addUser = e => {
         e.preventDefault();
         const db = firebase.firestore();
@@ -46,9 +75,31 @@ class EnterUserDetails extends Component {
         });
       };
 
+
+      componentDidMount(){
+        if(this.props.match.isExact==false ){
+        const {Name,Surname,Number,Address,Bought,Reviews,bool}=this.props.location.state.Customer
+            this.setState({
+                Name:Name,
+                Surname:Surname,
+                Number:Number,
+                Address:Address,
+                Bought:Bought,
+                Reviews:Reviews,
+                bool:bool
+            })
+        }
+    }
     render() { 
         return ( 
-                <form className="UserDetailForm" onSubmit={this.addUser}>
+                <form
+                 className="UserDetailForm" 
+                 onSubmit={
+                    this.state.bool==1?(
+                        this.UpdateUser
+                    ):(
+                        this.addUser
+                     )}>
                 <h1>Enter User Data</h1>
                 <FormInput
                 name="Name" 

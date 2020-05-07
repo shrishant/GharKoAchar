@@ -15,7 +15,7 @@ const Router = () => (
     <Header/>
     <Switch>
     <Route exact path="/" component={MainPage} />
-    <Route exact path='/EnterUserDetails' component={EnterUserDetails}/>
+    <Route path='/EnterUserDetails' component={EnterUserDetails}/>
     </Switch>
   </BrowserRouter>
 );

@@ -4,18 +4,31 @@ import {Link} from "react-router-dom";
 import DeleteButton from '../DeleteButton/deleteButton.component';
 import {db} from '../../firebase';
 
-const Card = (props) => {
+const Card = (props ) => {
+
+    const {Name,Surname,Number,Address,Bought,Reviews} = props.Cus;
     return ( 
     <div className="card-container">
-        <h3>NAME : {props.Cus.Name} {props.Cus.Surname}</h3>
-        <p>NUMBER : {props.Cus.Number}</p>
-        <p>ADDRESS: {props.Cus.Address}</p>
-        <p>BOUGHT: {props.Cus.Bought}</p>
-        <p>REVIEWS: {props.Cus.Reviews}</p>
-        <DeleteButton Number={props.Cus.Number}/>
-        <Link to="/EnterUserDetails">
-        <button className="updatedata">
-        <i class="fa fa-pencil-square-o"></i>
+        <h3>NAME : {Name} {Surname}</h3>
+        <p>NUMBER : {Number}</p>
+        <p>ADDRESS: {Address}</p>
+        <p>BOUGHT: {Bought}</p>
+        <p>REVIEWS: {Reviews}</p>
+        <DeleteButton Number={Number}/>
+        <Link to={{
+                pathname: `/EnterUserDetails/: + {props}`,
+                state:{
+                    Customer:{"Name":Name,
+                                        "Surname":Surname,
+                                        "Number":Number,
+                                        "Address": Address,
+                                        "Bought":Bought,
+                                        "Reviews":Reviews,
+                                        "bool":1 }
+                }
+        }}>
+        <button className="updatedata" >
+        <i className="fa fa-pencil-square-o"></i>
         </button>
         </Link>
     </div>
