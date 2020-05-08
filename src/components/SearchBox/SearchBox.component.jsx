@@ -1,14 +1,8 @@
 import React from 'react';
-import './SearchBox.component.scss'
+import '../../assets/sass/custom/searchBox/searchBox.style.scss';
 
-const SearchBox = (props) => {
-        return (  
-            <input  
-            className="search"
-            type="number"
-            onChange = {props.handleChange}
-             />
-        );
-}
- 
+const SearchBox = props => {
+  return <input className="searchBox" type="number" onChange={props.handleChange} />;
+};
+
 export default SearchBox;

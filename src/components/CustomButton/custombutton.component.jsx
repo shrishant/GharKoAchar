@@ -1,13 +1,12 @@
 import React from 'react';
-import './custombutton.style.scss'
+import '../../assets/sass/custom/customButton/customButton.style.scss';
 
-const Submit = (props) => {
-    return ( 
-        <button 
-        type={props.submit}
-        >Submit
-        </button>
-     );
-}
- 
+const Submit = props => {
+  return (
+    <button className="customButton" type={props.submit}>
+      Submit
+    </button>
+  );
+};
+
 export default Submit;

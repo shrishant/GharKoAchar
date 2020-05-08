@@ -1,154 +1,154 @@
 import React, { Component } from 'react';
-import FormInput from '../FormInput/FormInput.component';
-import './EnterUserDetails.style.scss';
-import CustomButton from '../CustomButton/custombutton.component';
-import firebase from "../../firebase";
+import FormInput from '../formInput/formInput.component';
+import CustomButton from '../customButton/customButton.component';
+
+import '../../assets/sass/custom/enterUserDetails/enterUserDetails.style.scss';
+
+import firebase from '../../firebase';
 
 class EnterUserDetails extends Component {
-    constructor(props){
-        super(props);
-        this.state = { 
-            Name:'',
-            Surname:'',
-            Number:'' ,
-            Address :"",
-            Bought:"",
-            Reviews:"",
-            bool:0
-         } //  console.log(props.location.state)
-         console.log(props)
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      surname: '',
+      number: '',
+      address: '',
+      bought: '',
+      reviews: '',
+      bool: 0,
+    };
+    console.log(props);
+  }
+
+  handleUpdate = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  updateUser = e => {
+    e.preventDefault();
+    const db = firebase.firestore();
+    db.settings({
+      timestampsInSnapshots: true,
+    });
+
+    let Ref = db.collection('users').doc(this.state.number);
+    let updateSingle = Ref.update({
+      name: this.state.name,
+      surname: this.state.surname,
+      number: this.state.number,
+      address: this.state.address,
+      bought: this.state.bought,
+      reviews: this.state.reviews,
+    });
+    this.setState({
+      name: '',
+      surname: '',
+      number: '',
+      address: '',
+      bought: '',
+      reviews: '',
+    });
+  };
+
+  addUser = e => {
+    e.preventDefault();
+    const db = firebase.firestore();
+    db.settings({
+      timestampsInSnapshots: true,
+    });
+    const userRef = db.collection('users').doc(this.state.number).set({
+      name: this.state.name,
+      surname: this.state.surname,
+      number: this.state.number,
+      address: this.state.address,
+      bought: this.state.bought,
+      reviews: this.state.reviews,
+    });
+    this.setState({
+      name: '',
+      surname: '',
+      number: '',
+      address: '',
+      bought: '',
+      reviews: '',
+    });
+  };
+
+  componentDidMount() {
+    if (!this.props.match.isExact) {
+      const { name, surname, number, address, bought, reviews, bool } = this.props.location.state.customer;
+      this.setState({
+        name: name,
+        surname: surname,
+        number: number,
+        address: address,
+        bought: bought,
+        reviews: reviews,
+        bool: bool,
+      });
     }
-
-    handleUpdate = e => {
-        this.setState({
-          [e.target.name]: e.target.value
-        });
-      }
-
-      UpdateUser =e =>{
-          e.preventDefault();
-          const db = firebase.firestore();
-          db.settings({
-              timestampsInSnapshots: true
-          });
-
-          let Ref = db.collection('users').doc(this.state.Number);
-            let updateSingle = Ref.update({
-                Name: this.state.Name,
-                Surname: this.state.Surname,
-                Number: this.state.Number,
-                Address: this.state.Address,
-                Bought: this.state.Bought,
-                Reviews: this .state.Reviews
-            });
-            this.setState({
-                Name:'',
-                Surname:'',
-                Number:'' ,
-                Address :"",
-                Bought:"",
-                Reviews:""
-            });
-      }
-
-      addUser = e => {
-        e.preventDefault();
-        const db = firebase.firestore();
-        db.settings({
-            timestampsInSnapshots: true
-        });
-        const userRef = db.collection('users').doc(this.state.Number).set({
-            Name: this.state.Name,
-            Surname: this.state.Surname,
-            Number: this.state.Number,
-            Address: this.state.Address,
-            Bought: this.state.Bought,
-            Reviews: this .state.Reviews
-        });  
-        this.setState({
-            Name:'',
-            Surname:'',
-            Number:'' ,
-            Address :"",
-            Bought:"",
-            Reviews:""
-        });
-      };
-
-
-      componentDidMount(){
-        if(this.props.match.isExact==false ){
-        const {Name,Surname,Number,Address,Bought,Reviews,bool}=this.props.location.state.Customer
-            this.setState({
-                Name:Name,
-                Surname:Surname,
-                Number:Number,
-                Address:Address,
-                Bought:Bought,
-                Reviews:Reviews,
-                bool:bool
-            })
-        }
-    }
-    render() { 
-        return ( 
-                <form
-                 className="UserDetailForm" 
-                 onSubmit={
-                    this.state.bool==1?(
-                        this.UpdateUser
-                    ):(
-                        this.addUser
-                     )}>
-                <h1>Enter User Data</h1>
-                <FormInput
-                name="Name" 
-                type="text"
-                label='name'
-                handleUpdate={this.handleUpdate}
-                value={this.state.Name}
-                required/>
-                <FormInput
-                name="Surname" 
-                type="text"
-                label='Surname'
-                handleUpdate={this.handleUpdate}
-                value={this.state.Surname}
-                required/>
-                <FormInput
-                name="Number" 
-                type="number"
-                label='number'
-                handleUpdate={this.handleUpdate}
-                value={this.state.Number}
-                required/>
-                <FormInput
-                name="Address" 
-                type="text"
-                label='Address'
-                handleUpdate={this.handleUpdate}
-                value={this.state.Address}
-                required/>
-                <FormInput
-                name="Bought" 
-                type="number"
-                label='Bought'
-                handleUpdate={this.handleUpdate}
-                value={this.state.Bought}
-                required/>
-                <FormInput
-                name="Reviews" 
-                type="text"
-                label='Reviews'
-                handleUpdate={this.handleUpdate}
-                value={this.state.Reviews}
-                required/>
-                <CustomButton type='submit' value='submit form' >
-                    Submit
-                </CustomButton>
-                </form>
-         );
-    }
+  }
+  render() {
+    return (
+      <form className="userDetailForm" onSubmit={this.state.bool === 1 ? this.updateUser : this.addUser}>
+        <h1>Enter User Data</h1>
+        <FormInput
+          name="name"
+          type="text"
+          label="name"
+          handleUpdate={this.handleUpdate}
+          value={this.state.name}
+          required
+        />
+        <FormInput
+          name="surname"
+          type="text"
+          label="surname"
+          handleUpdate={this.handleUpdate}
+          value={this.state.surname}
+          required
+        />
+        <FormInput
+          name="number"
+          type="number"
+          label="number"
+          handleUpdate={this.handleUpdate}
+          value={this.state.number}
+          required
+        />
+        <FormInput
+          name="address"
+          type="text"
+          label="address"
+          handleUpdate={this.handleUpdate}
+          value={this.state.address}
+          required
+        />
+        <FormInput
+          name="bought"
+          type="number"
+          label="bought"
+          handleUpdate={this.handleUpdate}
+          value={this.state.bought}
+          required
+        />
+        <FormInput
+          name="reviews"
+          type="text"
+          label="reviews"
+          handleUpdate={this.handleUpdate}
+          value={this.state.reviews}
+          required
+        />
+        <CustomButton type="submit" value="submitForm">
+          Submit
+        </CustomButton>
+      </form>
+    );
+  }
 }
- 
+
 export default EnterUserDetails;

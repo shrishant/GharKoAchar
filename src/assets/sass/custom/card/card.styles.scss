@@ -1,0 +1,41 @@
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #95dada;
+  border: 3px solid #fff;
+  border-radius: 5%;
+  padding: 10px;
+  text-align: left;
+  position: relative;
+
+  .deleteButton {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    display: none;
+    font-size: 58px;
+    color: red;
+    cursor: pointer;
+  }
+
+  .upDateData {
+    position: absolute;
+    top: 25%;
+    left: 55%;
+    display: none;
+    font-size: 58px;
+    color: red;
+    cursor: pointer;
+  }
+}
+
+.cardContainer:hover {
+  transform: scale(1.25);
+  background-color: rgba(61, 57, 57, 0.952);
+  .deleteButton {
+    display: inline-flex;
+  }
+  .upDateData {
+    display: flex;
+  }
+}

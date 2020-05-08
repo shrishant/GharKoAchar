@@ -1,12 +1,12 @@
 import React from 'react';
-import './FormInput.styles.scss'
+import '../../assets/sass/custom/formInput/formInput.styles.scss';
 
-const FormInput = (props) => {
-    return ( 
-        <div className="group">
-            <label className="form-input-label">{props.label.toUpperCase()}</label>
-            <input className='form-input' type={props.type} onChange={props.handleUpdate}  {...props}/>
-        </div>
-     );
-}
+const FormInput = props => {
+  return (
+    <div className="group">
+      <label className="formInputLabel">{props.label.toUpperCase()}</label>
+      <input className="formInput" type={props.type} onChange={props.handleUpdate} {...props} />
+    </div>
+  );
+};
 export default FormInput;
