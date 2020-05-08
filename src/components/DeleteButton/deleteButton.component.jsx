@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { db } from '../../firebase';
+import { db } from '../../utils/firebase.util';
 
 const DeleteButton = props => {
   let handleDelete = e => {

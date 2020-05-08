@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import DeleteButton from '../deleteButton/deleteButton.component';
 
-import { db } from '../../firebase';
+import { db } from '../../utils/firebase.util';
 
 import '../../assets/sass/custom/card/card.styles.scss';
 

@@ -4,7 +4,7 @@ import CustomButton from '../customButton/customButton.component';
 
 import '../../assets/sass/custom/enterUserDetails/enterUserDetails.style.scss';
 
-import firebase from '../../firebase';
+import firebase from '../../utils/firebase.util';
 
 class EnterUserDetails extends Component {
   constructor(props) {

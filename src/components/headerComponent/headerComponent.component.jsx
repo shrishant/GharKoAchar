@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Logo from '../../assets/images/GharKoAchar.jpg';
+import Logo from '../../assets/images/GharKoAchar.png.png';
 
 import '../../assets/sass/custom/headerComponent/headerComponent.styles.scss';
 
