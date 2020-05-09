@@ -6,10 +6,11 @@
     display: flex;
     float: right;
     font-weight: bolder;
+    font-size: large;
     line-height: 28px;
-    margin-top: 20px;
+    margin: 4% 1%;
     justify-content: space-evenly;
-    width: 15%;
+    width: 20%;
 
     div {
       border: 1px solid gray;
@@ -23,7 +24,7 @@
   }
   img {
     float: left;
-    max-width: 8%;
+    max-width: 12%;
     border-radius: 50%;
   }
 }

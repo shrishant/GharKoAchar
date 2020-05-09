@@ -5,9 +5,7 @@
 }
 
 body {
-  background: linear-gradient(163deg, rgb(31, 177, 87), rgb(50, 102, 70));
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-color: #dfdbd8;
 }
 
 a {
