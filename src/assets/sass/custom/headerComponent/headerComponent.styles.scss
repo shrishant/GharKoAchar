@@ -1,0 +1,29 @@
+.headerStyle {
+  overflow: hidden;
+  padding: 20px 52px;
+
+  .navBar {
+    display: flex;
+    float: right;
+    font-weight: bolder;
+    line-height: 28px;
+    margin-top: 20px;
+    justify-content: space-evenly;
+    width: 15%;
+
+    div {
+      border: 1px solid gray;
+      padding: 2px 10px;
+    }
+
+    div:hover {
+      cursor: pointer;
+      background-color: #95dada;
+    }
+  }
+  img {
+    float: left;
+    max-width: 8%;
+    border-radius: 50%;
+  }
+}
