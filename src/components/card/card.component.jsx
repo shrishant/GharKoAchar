@@ -7,7 +7,7 @@ import { db } from '../../utils/firebase.util';
 import '../../assets/sass/custom/card/card.styles.scss';
 
 const Card = props => {
-  const { name, number, address, amount } = props.Cus;
+  const { name, number, address, amount, createdDate } = props.Cus;
   return (
     <div className="cardContainer">
       <h3>NAME : {name}</h3>
@@ -25,6 +25,7 @@ const Card = props => {
               address: address,
               amount: amount,
               bool: 1,
+              createdDate: createdDate,
             },
           },
         }}

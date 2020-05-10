@@ -14,9 +14,9 @@ class EnterUserDetails extends Component {
       number: '',
       address: '',
       amount: '',
+      createdDate: '',
       bool: 0,
     };
-    console.log(props);
   }
 
   handleUpdate = e => {
@@ -32,49 +32,58 @@ class EnterUserDetails extends Component {
       timestampsInSnapshots: true,
     });
 
-    let Ref = db.collection('customerDetails').doc(this.state.number);
+    let Ref = db.collection('customerDetails').doc(this.state.createdDate);
     let updateSingle = Ref.update({
       name: this.state.name,
       number: this.state.number,
       address: this.state.address,
       amount: this.state.amount,
+      createdDate: this.state.createdDate,
     });
     this.setState({
       name: '',
       number: '',
       address: '',
       amount: '',
+      createdDate: '',
     });
   };
 
   addUser = e => {
+    var today = new Date();
+    var date = today.getFullYear() + 'XXX' + (today.getMonth() + 1) + 'AAA' + today.getDate();
+    var time = today.getHours() + 'CDE' + today.getMinutes() + '1Do2' + today.getSeconds();
+    var dateTimeForCreate = date + '$' + time;
     e.preventDefault();
     const db = firebase.firestore();
     db.settings({
       timestampsInSnapshots: true,
     });
-    const userRef = db.collection('customerDetails').doc(this.state.number).set({
+    const userRef = db.collection('customerDetails').doc(dateTimeForCreate).set({
       name: this.state.name,
       number: this.state.number,
       address: this.state.address,
       amount: this.state.amount,
+      createdDate: dateTimeForCreate,
     });
     this.setState({
       name: '',
       number: '',
       address: '',
       amount: '',
+      createdDate: '',
     });
   };
 
   componentDidMount() {
     if (!this.props.match.isExact) {
-      const { name, number, address, amount, bool } = this.props.location.state.customer;
+      const { name, number, address, amount, bool, createdDate } = this.props.location.state.customer;
       this.setState({
         name: name,
         number: number,
         address: address,
         amount: amount,
+        createdDate: createdDate,
         bool: bool,
       });
     }
