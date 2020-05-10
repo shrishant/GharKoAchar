@@ -11,11 +11,9 @@ class EnterUserDetails extends Component {
     super(props);
     this.state = {
       name: '',
-      surname: '',
       number: '',
       address: '',
-      bought: '',
-      reviews: '',
+      amount: '',
       bool: 0,
     };
     console.log(props);
@@ -34,22 +32,18 @@ class EnterUserDetails extends Component {
       timestampsInSnapshots: true,
     });
 
-    let Ref = db.collection('users').doc(this.state.number);
+    let Ref = db.collection('customerDetails').doc(this.state.number);
     let updateSingle = Ref.update({
       name: this.state.name,
-      surname: this.state.surname,
       number: this.state.number,
       address: this.state.address,
-      bought: this.state.bought,
-      reviews: this.state.reviews,
+      amount: this.state.amount,
     });
     this.setState({
       name: '',
-      surname: '',
       number: '',
       address: '',
-      bought: '',
-      reviews: '',
+      amount: '',
     });
   };
 
@@ -59,34 +53,28 @@ class EnterUserDetails extends Component {
     db.settings({
       timestampsInSnapshots: true,
     });
-    const userRef = db.collection('users').doc(this.state.number).set({
+    const userRef = db.collection('customerDetails').doc(this.state.number).set({
       name: this.state.name,
-      surname: this.state.surname,
       number: this.state.number,
       address: this.state.address,
-      bought: this.state.bought,
-      reviews: this.state.reviews,
+      amount: this.state.amount,
     });
     this.setState({
       name: '',
-      surname: '',
       number: '',
       address: '',
-      bought: '',
-      reviews: '',
+      amount: '',
     });
   };
 
   componentDidMount() {
     if (!this.props.match.isExact) {
-      const { name, surname, number, address, bought, reviews, bool } = this.props.location.state.customer;
+      const { name, number, address, amount, bool } = this.props.location.state.customer;
       this.setState({
         name: name,
-        surname: surname,
         number: number,
         address: address,
-        bought: bought,
-        reviews: reviews,
+        amount: amount,
         bool: bool,
       });
     }
@@ -101,14 +89,6 @@ class EnterUserDetails extends Component {
           label="name"
           handleUpdate={this.handleUpdate}
           value={this.state.name}
-          required
-        />
-        <FormInput
-          name="surname"
-          type="text"
-          label="surname"
-          handleUpdate={this.handleUpdate}
-          value={this.state.surname}
           required
         />
         <FormInput
@@ -128,19 +108,11 @@ class EnterUserDetails extends Component {
           required
         />
         <FormInput
-          name="bought"
+          name="amount"
           type="number"
-          label="bought"
+          label="amount"
           handleUpdate={this.handleUpdate}
-          value={this.state.bought}
-          required
-        />
-        <FormInput
-          name="reviews"
-          type="text"
-          label="reviews"
-          handleUpdate={this.handleUpdate}
-          value={this.state.reviews}
+          value={this.state.amount}
           required
         />
         <CustomButton type="submit" value="submitForm">

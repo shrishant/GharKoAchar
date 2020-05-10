@@ -7,16 +7,13 @@ import { db } from '../../utils/firebase.util';
 import '../../assets/sass/custom/card/card.styles.scss';
 
 const Card = props => {
-  const { name, surname, number, address, bought, reviews } = props.Cus;
+  const { name, number, address, amount } = props.Cus;
   return (
     <div className="cardContainer">
-      <h3>
-        NAME : {name} {surname}
-      </h3>
+      <h3>NAME : {name}</h3>
       <p>NUMBER : {number}</p>
       <p>ADDRESS: {address}</p>
-      <p>BOUGHT: {bought}</p>
-      <p>REVIEWS: {reviews}</p>
+      <p>AMOUNT: {amount}</p>
       <DeleteButton number={number} />
       <Link
         to={{
@@ -24,11 +21,9 @@ const Card = props => {
           state: {
             customer: {
               name: name,
-              surname: surname,
               number: number,
               address: address,
-              bought: bought,
-              reviews: reviews,
+              amount: amount,
               bool: 1,
             },
           },

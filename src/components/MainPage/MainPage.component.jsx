@@ -17,7 +17,7 @@ class MainPage extends Component {
 
   componentDidMount() {
     let customers = [];
-    db.collection('users')
+    db.collection('customerDetails')
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
