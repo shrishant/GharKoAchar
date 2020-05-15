@@ -7,7 +7,6 @@ import { Router as BrowserRouter, Switch, Route } from 'react-router-dom';
 import Header from './headerComponent/headerComponent.component';
 import EnterUserDetails from './enterUserDetails/enterUserDetails.components';
 import AddStrength from './addStrength/addStrength.components';
-import UserBoughtAchar from './userBoughtAchar/userBoughtAchar.component';
 
 import '../assets/css/Main.style.css';
 
@@ -19,7 +18,6 @@ const Router = () => (
       <Route exact path="/" component={MainPage} />
       <Route path="/enterUserDetails" component={EnterUserDetails} />
       <Route path="/addStrength" component={AddStrength} />
-      <Route path="/achar" component={UserBoughtAchar} />
     </Switch>
   </BrowserRouter>
 );

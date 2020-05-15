@@ -7,13 +7,20 @@ import { db } from '../../utils/firebase.util';
 import '../../assets/sass/custom/card/card.styles.scss';
 
 const Card = props => {
-  const { name, number, address, amount, createdDate } = props.Cus;
+  const { name, number, address, amount, createdDate, acharBought } = props.Cus;
+  const acharBoughtArray = Object.entries(acharBought);
+
   return (
     <div className="cardContainer">
-      <h3>NAME : {name}</h3>
+      <h3>{name.toUpperCase()}</h3>
       <p>NUMBER : {number}</p>
       <p>ADDRESS: {address}</p>
       <p>AMOUNT: {amount}</p>
+      {acharBoughtArray.map(achar => (
+        <p>
+          {achar[0]} : {achar[1]}
+        </p>
+      ))}
       <DeleteButton number={number} />
       <Link
         to={{

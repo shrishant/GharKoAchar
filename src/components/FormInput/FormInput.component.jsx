@@ -5,7 +5,7 @@ const FormInput = props => {
   return (
     <div className="group">
       <label className="formInputLabel">{props.label.toUpperCase()}</label>
-      <input className="formInput" type={props.type} onChange={props.handleUpdateBox} value={props.value} {...props} />
+      <input className="formInput" type={props.type} onChange={props.handleUpdate} {...props} />
     </div>
   );
 };

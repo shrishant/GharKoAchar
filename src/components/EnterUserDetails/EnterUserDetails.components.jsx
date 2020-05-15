@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import FormInput from '../formInput/formInput.component';
 import CustomButton from '../customButton/customButton.component';
-// import UserBoughtAchar from '../userBoughtAchar/userBoughtAchar.component'
 
 import '../../assets/sass/custom/enterUserDetails/enterUserDetails.style.scss';
 
@@ -21,10 +20,11 @@ class EnterUserDetails extends Component {
     };
   }
 
-  handleUpdateBox = e => {
+  handleUpdate = e => {
     this.setState({
       [e.target.name]: e.target.value,
     });
+    console.log(this.state);
   };
 
   updateUser = e => {
@@ -59,15 +59,18 @@ class EnterUserDetails extends Component {
     db.settings({
       timestampsInSnapshots: true,
     });
-
-    const userRef = db.collection('customerDetails').doc(dateTimeForCreate).set({
-      name: this.state.name,
-      number: this.state.number,
-      address: this.state.address,
-      amount: this.state.amount,
-      createdDate: dateTimeForCreate,
-      acharName: this.state.achar.productName,
-    });
+    const { name, number, address, amount, bool, createdDate, achar, ...otherprops } = this.state;
+    const userRef = db
+      .collection('customerDetails')
+      .doc(dateTimeForCreate)
+      .set({
+        name: name,
+        number: number,
+        address: address,
+        amount: amount,
+        createdDate: dateTimeForCreate,
+        acharBought: { ...otherprops },
+      });
     this.setState({
       name: '',
       number: '',
@@ -78,35 +81,6 @@ class EnterUserDetails extends Component {
   };
 
   componentDidMount() {
-    let achars = this.state.achar;
-    if (!this.props.match.isExact) {
-      //if statement runs when user clicks edit
-      console.log('edit');
-      const { name, number, address, amount, bool, createdDate } = this.props.location.state.customer;
-      this.setState({
-        name: name,
-        number: number,
-        address: address,
-        amount: amount,
-        createdDate: createdDate,
-        bool: bool,
-        achar: achars,
-      });
-    } else {
-      console.log('not edit');
-      this.setState({
-        achar: achars,
-        name: '',
-        number: '',
-        address: '',
-        amount: '',
-        createdDate: '',
-      });
-    }
-  }
-
-  componentWillMount() {
-    //only using componentWill mount because the following code is asyncronous... if possible, make in didMount
     let achars = [];
     db.collection('acharStrength')
       .get()
@@ -114,20 +88,34 @@ class EnterUserDetails extends Component {
         snapshot.forEach(doc => {
           achars.push(doc.data());
         });
-        this.setState({
-          achar: achars,
-          name: this.state.name,
-          number: this.state.number,
-          address: this.state.address,
-          amount: this.state.amount,
-          createdDate: this.state.createdDate,
-        });
       })
       .catch(err => {
         console.log('Error getting documents', err);
       });
+    if (!this.props.match.isExact) {
+      //if statement runs when user clicks edit
+      const { name, number, address, amount, bool, createdDate } = this.props.location.state.customer;
+      this.setState({
+        name: name,
+        number: number,
+        address: address,
+        amount: amount,
+        createdDate: createdDate,
+        bool: 0,
+        achar: achars,
+      });
+    } else {
+      this.setState({
+        name: '',
+        number: '',
+        address: '',
+        amount: '',
+        createdDate: '',
+        bool: 0,
+        achar: achars,
+      });
+    }
   }
-
   render() {
     return (
       <form className="userDetailForm" onSubmit={this.state.bool === 1 ? this.updateUser : this.addUser}>
@@ -136,7 +124,7 @@ class EnterUserDetails extends Component {
           name="name"
           type="text"
           label="name"
-          handleUpdateBox={this.handleUpdateBox}
+          handleUpdate={this.handleUpdate}
           value={this.state.name}
           required
         />
@@ -144,7 +132,7 @@ class EnterUserDetails extends Component {
           name="number"
           type="number"
           label="number"
-          handleUpdateBox={this.handleUpdateBox}
+          handleUpdate={this.handleUpdate}
           value={this.state.number}
           required
         />
@@ -152,19 +140,17 @@ class EnterUserDetails extends Component {
           name="address"
           type="text"
           label="address"
-          handleUpdateBox={this.handleUpdateBox}
+          handleUpdate={this.handleUpdate}
           value={this.state.address}
           required
         />
         <div className="userBoughtAchar">
           {this.state.achar.map(pickel => (
             <FormInput
-              key={pickel.id}
-              name="name"
+              name={pickel.productName + '-' + pickel.weightOfAchar}
               type="number"
               label={pickel.productName + '-' + pickel.weightOfAchar}
-              handleUpdateBox={this.state.handleUpdateBox}
-              value={this.state.achar.productName}
+              handleUpdate={this.handleUpdate}
               required
             />
           ))}
@@ -173,8 +159,9 @@ class EnterUserDetails extends Component {
           name="amount"
           type="text"
           label="amount"
-          handleUpdateBox={this.handleUpdateBox}
+          handleUpdate={this.handleUpdate}
           value={this.state.amount}
+          readonly
         />
         <CustomButton type="submit" value="submitForm">
           Submit

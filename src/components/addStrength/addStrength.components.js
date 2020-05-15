@@ -8,7 +8,7 @@ import '../../assets/sass/custom/enterUserDetails/enterUserDetails.style.scss';
 import firebase from '../../utils/firebase.util';
 
 class AddStrength extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       productName: '',
@@ -17,7 +17,7 @@ class AddStrength extends Component {
     };
   }
 
-  handleUpdateBox = e => {
+  handleUpdate = e => {
     this.setState({
       [e.target.name]: e.target.value,
     });
@@ -30,7 +30,7 @@ class AddStrength extends Component {
       timestampsInSnapshots: true,
     });
 
-    let id = this.state.productName + ' ' + this.state.weightOfAchar + ' ' + this.state.productName;
+    let id = this.state.productName + this.state.weightOfAchar + this.state.productName;
     id = id.split(' ').join('').toLowerCase();
     const acharRef = db.collection('acharStrength').doc(id).set({
       productName: this.state.productName,
@@ -44,7 +44,6 @@ class AddStrength extends Component {
       amountOfAchar: '',
     });
   };
-
   render() {
     return (
       <form className="userDetailForm" onSubmit={this.addStrengthVal}>
@@ -53,7 +52,7 @@ class AddStrength extends Component {
           name="productName"
           type="text"
           label="Name of Achar"
-          handleUpdateBox={this.handleUpdateBox}
+          handleUpdate={this.handleUpdate}
           value={this.state.productName}
           required
         />
@@ -61,7 +60,7 @@ class AddStrength extends Component {
           name="weightOfAchar"
           type="text"
           label="Weight of Achar"
-          handleUpdateBox={this.handleUpdateBox}
+          handleUpdate={this.handleUpdate}
           value={this.state.weightOfAchar}
           required
         />
@@ -69,7 +68,7 @@ class AddStrength extends Component {
           name="amountOfAchar"
           type="number"
           label="Amount"
-          handleUpdateBox={this.handleUpdateBox}
+          handleUpdate={this.handleUpdate}
           value={this.state.amountOfAchar}
           required
         />
