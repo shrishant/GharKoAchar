@@ -28,9 +28,13 @@
     cursor: pointer;
   }
 
-  h2 {
+  h3 {
     text-align: center;
   }
+}
+
+.cardDelete {
+  display: none;
 }
 
 .cardContainer:hover {

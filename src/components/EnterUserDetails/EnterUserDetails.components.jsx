@@ -9,22 +9,45 @@ import { db, firebase } from '../../utils/firebase.util';
 class EnterUserDetails extends Component {
   constructor(props) {
     super(props);
+    const { name, number, address, amount, action, createdDate, acharBought } = this.props.location.state.customer;
     this.state = {
-      name: '',
-      number: '',
-      address: '',
-      amount: '',
-      createdDate: '',
-      bool: 0,
+      name: name,
+      number: number,
+      address: address,
+      amount: amount,
+      createdDate: createdDate,
+      action: action,
       achar: [],
+      acharBought: acharBought,
     };
   }
+  onEditFields = e => {
+    if (this.state.action == 'add') {
+      this.setState({
+        [e.target.name]: e.target.value,
+      });
+    } else {
+      for (let i = 0; i < this.state.acharBought.length; i++) {
+        if (e.target.name == this.state.acharBought[i].name) {
+          this.state.acharBought[i].value = e.target.value;
+          this.state.achar[i].value = e.target.value;
+        } else {
+          //put those value which are in achar but not in acharBought
+          console.log('....');
+        }
+      }
+
+      this.setState({
+        acharBought: this.state.acharBought,
+        achar: this.state.achar,
+      });
+    }
+  };
 
   handleUpdate = e => {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    console.log(this.state);
   };
 
   updateUser = e => {
@@ -32,14 +55,16 @@ class EnterUserDetails extends Component {
     db.settings({
       timestampsInSnapshots: true,
     });
-
     let Ref = db.collection('customerDetails').doc(this.state.createdDate);
+    const { name, number, address, amount, acharBought, createdDate, ...otherprops } = this.state;
+    console.log({ ...otherprops });
     let updateSingle = Ref.update({
-      name: this.state.name,
-      number: this.state.number,
-      address: this.state.address,
-      amount: this.state.amount,
-      createdDate: this.state.createdDate,
+      name: name,
+      number: number,
+      address: address,
+      amount: amount,
+      createdDate: createdDate,
+      acharBought: acharBought,
     });
     this.setState({
       name: '',
@@ -47,6 +72,7 @@ class EnterUserDetails extends Component {
       address: '',
       amount: '',
       createdDate: '',
+      bool: 0,
     });
   };
 
@@ -59,24 +85,28 @@ class EnterUserDetails extends Component {
     db.settings({
       timestampsInSnapshots: true,
     });
-    const { name, number, address, amount, bool, createdDate, achar, ...otherprops } = this.state;
-    const userRef = db
-      .collection('customerDetails')
-      .doc(dateTimeForCreate)
-      .set({
-        name: name,
-        number: number,
-        address: address,
-        amount: amount,
-        createdDate: dateTimeForCreate,
-        acharBought: { ...otherprops },
-      });
+    const { name, number, address, amount, createdDate, action, acharBought, achar, ...otherprops } = this.state;
+    let acharObj = [];
+    for (let key in { ...otherprops }) {
+      if ({ ...otherprops }.hasOwnProperty(key)) {
+        acharObj.push({ name: key, value: { ...otherprops }[key] });
+      }
+    }
+    const userRef = db.collection('customerDetails').doc(dateTimeForCreate).set({
+      name: name,
+      number: number,
+      address: address,
+      amount: amount,
+      createdDate: dateTimeForCreate,
+      acharBought: acharObj,
+    });
     this.setState({
       name: '',
       number: '',
       address: '',
       amount: '',
       createdDate: '',
+      action: 'add',
     });
   };
 
@@ -88,22 +118,50 @@ class EnterUserDetails extends Component {
         snapshot.forEach(doc => {
           achars.push(doc.data());
         });
+        const { name, number, address, amount, createdDate, action, acharBought } = this.state;
+        //this.setState is being used because, we need achars array in the state
+        if (this.state.action === 'edit') {
+          for (let i = 0; i < acharBought.length; i++) {
+            for (let j = 0; j < achars.length; j++) {
+              if (acharBought[i].name == achars[j].productName + '-' + achars[j].weightOfAchar) {
+                achars[j].value = acharBought[i].value;
+                continue;
+              }
+            }
+          }
+        }
+
+        this.setState({
+          name: name,
+          number: number,
+          address: address,
+          amount: amount,
+          createdDate: createdDate,
+          action: action,
+          achar: achars,
+        });
+        const character = Object.assign(this.state, acharBought);
+        this.setState(character);
       })
       .catch(err => {
         console.log('Error getting documents', err);
       });
+
+    const { name, number, address, amount, createdDate, acharBought } = this.state;
     if (!this.props.match.isExact) {
       //if statement runs when user clicks edit
-      const { name, number, address, amount, bool, createdDate } = this.props.location.state.customer;
       this.setState({
         name: name,
         number: number,
         address: address,
         amount: amount,
         createdDate: createdDate,
-        bool: 0,
+        action: 'edit',
         achar: achars,
       });
+
+      const character = Object.assign(this.state, acharBought);
+      this.setState(character);
     } else {
       this.setState({
         name: '',
@@ -111,14 +169,16 @@ class EnterUserDetails extends Component {
         address: '',
         amount: '',
         createdDate: '',
-        bool: 0,
+        action: 'add',
         achar: achars,
       });
     }
   }
+
   render() {
+    // console.log(this.state.achar)
     return (
-      <form className="userDetailForm" onSubmit={this.state.bool === 1 ? this.updateUser : this.addUser}>
+      <form className="userDetailForm" onSubmit={this.state.action == 'edit' ? this.updateUser : this.addUser}>
         <h1>Enter User Data</h1>
         <FormInput
           name="name"
@@ -150,7 +210,10 @@ class EnterUserDetails extends Component {
               name={pickel.productName + '-' + pickel.weightOfAchar}
               type="number"
               label={pickel.productName + '-' + pickel.weightOfAchar}
-              handleUpdate={this.handleUpdate}
+              // handleUpdate={this.handleUpdate}
+              onChange={this.onEditFields}
+              value={pickel.value}
+              key={pickel.id}
               required
             />
           ))}
@@ -161,7 +224,7 @@ class EnterUserDetails extends Component {
           label="amount"
           handleUpdate={this.handleUpdate}
           value={this.state.amount}
-          readonly
+          required
         />
         <CustomButton type="submit" value="submitForm">
           Submit

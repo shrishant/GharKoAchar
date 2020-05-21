@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Card from '../card/card.component';
 
 import '../../assets/sass/custom/cardlist/cardlist.style.scss';

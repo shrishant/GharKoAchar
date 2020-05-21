@@ -10,7 +10,23 @@ const Header = () => {
       <img src={Logo} />
       <div className="navBar">
         <Link to="/">Home</Link>
-        <Link to="/enterUserDetails">Enter User</Link>
+        <Link
+          to={{
+            pathname: '/enterUserDetails',
+            state: {
+              customer: {
+                name: '',
+                number: '',
+                address: '',
+                amount: '',
+                action: 'add',
+                createdDate: '',
+              },
+            },
+          }}
+        >
+          Enter User
+        </Link>
         <Link to="/addStrength">Add Strength</Link>
         <Link to="/login">Login</Link>
       </div>

@@ -29,13 +29,12 @@ class AddStrength extends Component {
     db.settings({
       timestampsInSnapshots: true,
     });
-
-    let id = this.state.productName + this.state.weightOfAchar + this.state.productName;
-    id = id.split(' ').join('').toLowerCase();
+    const { productName, weightOfAchar, amountOfAchar } = this.state;
+    let id = productName + '-' + weightOfAchar;
     const acharRef = db.collection('acharStrength').doc(id).set({
-      productName: this.state.productName,
-      weightOfAchar: this.state.weightOfAchar,
-      amountOfAchar: this.state.amountOfAchar,
+      productName: productName,
+      weightOfAchar: weightOfAchar,
+      amountOfAchar: amountOfAchar,
       id: id,
     });
     this.setState({
