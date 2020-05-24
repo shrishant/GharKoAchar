@@ -9,14 +9,16 @@ import '../../assets/sass/custom/card/card.styles.scss';
 class Card extends Component {
   constructor(props) {
     super(props);
-    const { name, number, address, amount, createdDate, acharBought } = props.Cus;
+    const { name, number, address, delivaryCharge, Discount, createdDate, acharBought } = props.Cus;
     this.state = {
       name: name,
       number: number,
       address: address,
-      amount: amount,
+      delivaryCharge: delivaryCharge,
       createdDate: createdDate,
       acharBought: acharBought,
+      Discount: Discount,
+      totalCost: 0,
     };
   }
 
@@ -27,38 +29,51 @@ class Card extends Component {
       name: '',
       number: '',
       address: '',
-      amount: '',
+      delivaryCharge: '',
+      Discount: '',
       createdDate: '',
       acharBought: [],
       delete: true,
     });
   };
+  calculateTotal() {
+    let totalCost = this.state.delivaryCharge - this.state.Discount;
+    for (let i = 0; i < this.state.acharBought.length; i++) {
+      totalCost = totalCost + parseInt(this.state.acharBought[i].bought) * parseInt(this.state.acharBought[i].amount);
+    }
+    return totalCost;
+  }
 
   render() {
+    const { number, name, address, delivaryCharge, Discount, acharBought, bought, createdDate, totalCost } = this.state;
     return (
       <div className={`${this.state.delete === true ? 'cardDelete' : ''} cardContainer`}>
-        <h3>{this.state.name.toUpperCase()}</h3>
-        <p>NUMBER : {this.state.number}</p>
-        <p>ADDRESS: {this.state.address}</p>
-        <p>AMOUNT: {this.state.amount}</p>
-        {this.state.acharBought.map(achar => (
-          <p>
-            {achar.name} : {achar.value}
+        <h3>{name.toUpperCase()}</h3>
+        <h4>{number} </h4>
+        <p>ADDRESS: {address}</p>
+        {acharBought.map(achar => (
+          <p key={achar.name}>
+            {achar.name} : {achar.bought}
           </p>
         ))}
-        <DeleteButton createdDate={this.state.createdDate} handleDelete={this.handleDelete} />
+        <p>Delivary Charge: {delivaryCharge}</p>
+        <p>Discount: {Discount}</p>
+        <h3>TotalCost: {this.calculateTotal()}</h3>
+
+        <DeleteButton createdDate={createdDate} handleDelete={this.handleDelete} />
         <Link
           to={{
             pathname: `/enterUserDetails/: + props.name`,
             state: {
               customer: {
-                name: this.state.name,
-                number: this.state.number,
-                address: this.state.address,
-                amount: this.state.amount,
+                name: name,
+                number: number,
+                address: address,
+                delivaryCharge: delivaryCharge,
+                Discount: Discount,
                 action: 'edit',
-                createdDate: this.state.createdDate,
-                acharBought: this.state.acharBought,
+                createdDate: createdDate,
+                acharBought: acharBought,
               },
             },
           }}
@@ -73,44 +88,3 @@ class Card extends Component {
 }
 
 export default Card;
-
-// const Card = props => {
-//   const { name, number, address, amount, createdDate, acharBought } = props.Cus;
-
-//   return (
-//     <div className="cardContainer">
-//       <h3>{name.toUpperCase()}</h3>
-//       <p>NUMBER : {number}</p>
-//       <p>ADDRESS: {address}</p>
-//       <p>AMOUNT: {amount}</p>
-//       {acharBought.map(achar => (
-//         <p>
-//           {achar.name} : {achar.value}
-//         </p>
-//       ))}
-//       <DeleteButton createdDate={createdDate} />
-//       <Link
-//         to={{
-//           pathname: `/enterUserDetails/: + props.name`,
-//           state: {
-//             customer: {
-//               name: name,
-//               number: number,
-//               address: address,
-//               amount: amount,
-//               action:"edit",
-//               createdDate: createdDate,
-//               acharBought:acharBought
-//             },
-//           },
-//         }}
-//       >
-//         <button className="upDateData">
-//           <i className="fa fa-pencil-square-o"></i>
-//         </button>
-//       </Link>
-//     </div>
-//   );
-// };
-
-// export default Card;

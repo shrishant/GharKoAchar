@@ -9,174 +9,233 @@ import { db, firebase } from '../../utils/firebase.util';
 class EnterUserDetails extends Component {
   constructor(props) {
     super(props);
-    const { name, number, address, amount, action, createdDate, acharBought } = this.props.location.state.customer;
+    const {
+      name,
+      number,
+      address,
+      action,
+      createdDate,
+      delivaryCharge,
+      Discount,
+      acharBought,
+    } = this.props.location.state.customer;
+
     this.state = {
+      //props for adding new user from header component
+      action: action,
+      address: address,
+      createdDate: createdDate,
       name: name,
       number: number,
-      address: address,
-      amount: amount,
-      createdDate: createdDate,
-      action: action,
-      achar: [],
+      delivaryCharge: delivaryCharge,
+      Discount: Discount,
+      //achar comes from backend, acharStrength.
+      acharStrength: [],
       acharBought: acharBought,
     };
   }
-  onEditFields = e => {
-    if (this.state.action == 'add') {
-      this.setState({
-        [e.target.name]: e.target.value,
-      });
-    } else {
-      for (let i = 0; i < this.state.acharBought.length; i++) {
-        if (e.target.name == this.state.acharBought[i].name) {
-          this.state.acharBought[i].value = e.target.value;
-          this.state.achar[i].value = e.target.value;
-        } else {
-          //put those value which are in achar but not in acharBought
-          console.log('....');
-        }
-      }
-
-      this.setState({
-        acharBought: this.state.acharBought,
-        achar: this.state.achar,
-      });
-    }
-  };
-
-  handleUpdate = e => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  updateUser = e => {
-    e.preventDefault();
-    db.settings({
-      timestampsInSnapshots: true,
-    });
-    let Ref = db.collection('customerDetails').doc(this.state.createdDate);
-    const { name, number, address, amount, acharBought, createdDate, ...otherprops } = this.state;
-    console.log({ ...otherprops });
-    let updateSingle = Ref.update({
-      name: name,
-      number: number,
-      address: address,
-      amount: amount,
-      createdDate: createdDate,
-      acharBought: acharBought,
-    });
-    this.setState({
-      name: '',
-      number: '',
-      address: '',
-      amount: '',
-      createdDate: '',
-      bool: 0,
-    });
-  };
-
-  addUser = e => {
-    var today = new Date();
-    var date = today.getFullYear() + 'XXX' + (today.getMonth() + 1) + 'AAA' + today.getDate();
-    var time = today.getHours() + 'CDE' + today.getMinutes() + '1Do2' + today.getSeconds();
-    var dateTimeForCreate = date + '$' + time;
-    e.preventDefault();
-    db.settings({
-      timestampsInSnapshots: true,
-    });
-    const { name, number, address, amount, createdDate, action, acharBought, achar, ...otherprops } = this.state;
-    let acharObj = [];
-    for (let key in { ...otherprops }) {
-      if ({ ...otherprops }.hasOwnProperty(key)) {
-        acharObj.push({ name: key, value: { ...otherprops }[key] });
-      }
-    }
-    const userRef = db.collection('customerDetails').doc(dateTimeForCreate).set({
-      name: name,
-      number: number,
-      address: address,
-      amount: amount,
-      createdDate: dateTimeForCreate,
-      acharBought: acharObj,
-    });
-    this.setState({
-      name: '',
-      number: '',
-      address: '',
-      amount: '',
-      createdDate: '',
-      action: 'add',
-    });
-  };
 
   componentDidMount() {
-    let achars = [];
+    //Getting data from backend from table acharStrength
+    let acharStrengths = [];
+    let acharBoughts = [];
     db.collection('acharStrength')
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
-          achars.push(doc.data());
+          acharStrengths.push(doc.data());
         });
-        const { name, number, address, amount, createdDate, action, acharBought } = this.state;
-        //this.setState is being used because, we need achars array in the state
+        const { name, number, address, delivaryCharge, Discount, createdDate, action, acharBought } = this.state;
+        console.log(acharBought);
         if (this.state.action === 'edit') {
           for (let i = 0; i < acharBought.length; i++) {
-            for (let j = 0; j < achars.length; j++) {
-              if (acharBought[i].name == achars[j].productName + '-' + achars[j].weightOfAchar) {
-                achars[j].value = acharBought[i].value;
+            for (let j = 0; j < acharStrengths.length; j++) {
+              if (acharBought[i].name == acharStrengths[j].id) {
+                acharStrengths[j].value = acharBought[i].bought;
                 continue;
               }
             }
           }
         }
 
-        this.setState({
-          name: name,
-          number: number,
-          address: address,
-          amount: amount,
-          createdDate: createdDate,
-          action: action,
-          achar: achars,
+        //copying amount and name from acharStrength to acharBought
+        acharStrengths.map(acharObject => {
+          acharBoughts.push({ name: acharObject.id, amount: acharObject.amountOfAchar });
         });
-        const character = Object.assign(this.state, acharBought);
-        this.setState(character);
+        //this.setState is being used because, we need achars array in the state
+        if (this.state.action === 'add') {
+          this.setState({
+            name: name,
+            number: number,
+            address: address,
+            delivaryCharge: delivaryCharge,
+            Discount: Discount,
+            createdDate: createdDate,
+            action: action,
+            acharStrength: acharStrengths,
+            acharBought: acharBoughts,
+          });
+        } else {
+          this.setState({
+            name: name,
+            number: number,
+            address: address,
+            delivaryCharge: delivaryCharge,
+            Discount: Discount,
+            createdDate: createdDate,
+            action: action,
+            acharStrength: acharStrengths,
+            acharBought: acharBought,
+          });
+        }
       })
       .catch(err => {
         console.log('Error getting documents', err);
       });
 
-    const { name, number, address, amount, createdDate, acharBought } = this.state;
+    const { name, number, address, delivaryCharge, Discount, createdDate, acharBought, acharStrength } = this.state;
     if (!this.props.match.isExact) {
       //if statement runs when user clicks edit
       this.setState({
         name: name,
         number: number,
         address: address,
-        amount: amount,
+        delivaryCharge: delivaryCharge,
+        Discount: Discount,
         createdDate: createdDate,
         action: 'edit',
-        achar: achars,
+        acharStrength: acharStrength,
+        acharBought: acharBought,
       });
-
-      const character = Object.assign(this.state, acharBought);
-      this.setState(character);
+      // const character = Object.assign(this.state, acharBought);
+      // this.setState(character);
     } else {
+      //when user adds new value
       this.setState({
         name: '',
         number: '',
         address: '',
-        amount: '',
+        delivaryCharge: '',
+        Discount: '',
         createdDate: '',
         action: 'add',
-        achar: achars,
+        acharStrength: acharStrength,
+        acharBought: acharBought,
       });
     }
   }
 
+  handleUpdate = e => {
+    if (this.state.action === 'edit') {
+      this.state.acharStrength.map(ach => {
+        if (ach.id === e.target.name) {
+          ach.value = e.target.value;
+        }
+      });
+
+      this.state.acharBought.map(ach => {
+        if (ach.name === e.target.name) {
+          ach.bought = e.target.value;
+        }
+      });
+
+      this.setState({
+        [e.target.name]: e.target.value,
+        acharStrength: this.state.acharStrength,
+        acharBought: this.state.acharBought,
+      });
+    } else if (this.state.action === 'add') {
+      this.state.acharBought.map(ach => {
+        if (ach.name === e.target.name) {
+          ach.bought = e.target.value;
+        }
+      });
+      this.setState({
+        [e.target.name]: e.target.value,
+        acharBought: this.state.acharBought,
+      });
+    } else {
+      console.error('There is a error');
+    }
+  };
+
+  addUser = e => {
+    e.preventDefault();
+    var today = new Date();
+    var date = today.getFullYear() + 'XXX' + (today.getMonth() + 1) + 'AAA' + today.getDate();
+    var time = today.getHours() + 'CDE' + today.getMinutes() + '1Do2' + today.getSeconds();
+    var dateTimeForCreate = date + '$' + time;
+    const {
+      name,
+      number,
+      address,
+      delivaryCharge,
+      Discount,
+      createdDate,
+      action,
+      acharBought,
+      achar,
+      ...otherprops
+    } = this.state;
+
+    const userRef = db.collection('customerDetails').doc(dateTimeForCreate).set({
+      name: name,
+      number: number,
+      address: address,
+      delivaryCharge: delivaryCharge,
+      Discount: Discount,
+      createdDate: dateTimeForCreate,
+      acharBought: acharBought,
+    });
+
+    this.setState({
+      name: '',
+      number: '',
+      address: '',
+      delivaryCharge: '',
+      Discount: '',
+      createdDate: '',
+      action: 'add',
+      acharBought: acharBought,
+    });
+  };
+
+  updateUser = e => {
+    e.preventDefault();
+    let Ref = db.collection('customerDetails').doc(this.state.createdDate);
+    const {
+      name,
+      number,
+      address,
+      delivaryCharge,
+      Discount,
+      acharBought,
+      acharStrength,
+      createdDate,
+      ...otherprops
+    } = this.state;
+    let updateSingle = Ref.update({
+      name: name,
+      number: number,
+      address: address,
+      delivaryCharge: delivaryCharge,
+      Discount: Discount,
+      createdDate: createdDate,
+      acharBought: acharBought,
+    });
+
+    this.setState({
+      name: '',
+      number: '',
+      address: '',
+      delivaryCharge: '',
+      Discount: '',
+      createdDate: '',
+      action: 'add',
+    });
+  };
+
   render() {
-    // console.log(this.state.achar)
     return (
       <form className="userDetailForm" onSubmit={this.state.action == 'edit' ? this.updateUser : this.addUser}>
         <h1>Enter User Data</h1>
@@ -190,8 +249,10 @@ class EnterUserDetails extends Component {
         />
         <FormInput
           name="number"
-          type="number"
+          type="text"
           label="number"
+          minLength={10}
+          maxLength={10}
           handleUpdate={this.handleUpdate}
           value={this.state.number}
           required
@@ -205,13 +266,12 @@ class EnterUserDetails extends Component {
           required
         />
         <div className="userBoughtAchar">
-          {this.state.achar.map(pickel => (
+          {this.state.acharStrength.map(pickel => (
             <FormInput
-              name={pickel.productName + '-' + pickel.weightOfAchar}
+              name={pickel.id}
               type="number"
-              label={pickel.productName + '-' + pickel.weightOfAchar}
-              // handleUpdate={this.handleUpdate}
-              onChange={this.onEditFields}
+              label={pickel.id}
+              handleUpdate={this.handleUpdate}
               value={pickel.value}
               key={pickel.id}
               required
@@ -219,11 +279,19 @@ class EnterUserDetails extends Component {
           ))}
         </div>
         <FormInput
-          name="amount"
-          type="text"
-          label="amount"
+          name="delivaryCharge"
+          type="number"
+          label="delivary Charge"
           handleUpdate={this.handleUpdate}
-          value={this.state.amount}
+          value={this.state.delivaryCharge}
+          required
+        />
+        <FormInput
+          name="Discount"
+          type="number"
+          label="Discount"
+          handleUpdate={this.handleUpdate}
+          value={this.state.Discount}
           required
         />
         <CustomButton type="submit" value="submitForm">
