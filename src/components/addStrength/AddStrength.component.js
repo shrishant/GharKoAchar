@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import FormInput from '../formInput/formInput.component';
-import cardList from '../cardList/cardList.component';
-import CustomButton from '../customButton/customButton.component';
+import FormInput from '../formInput/FormInput.component';
+import cardList from '../cardList/CardList.component';
+import CustomButton from '../customButton/CustomButton.component';
 
-import '../../assets/sass/custom/enterUserDetails/enterUserDetails.style.scss';
+import '../../assets/sass/custom/enterUserDetails/EnterUserDetails.style.scss';
 
 import firebase from '../../utils/firebase.util';
 
@@ -29,9 +29,9 @@ class AddStrength extends Component {
     db.settings({
       timestampsInSnapshots: true,
     });
-    const { productName, weightOfAchar, amountOfAchar } = this.state;
+    var { productName, weightOfAchar, amountOfAchar } = this.state;
     let id = productName + '-' + weightOfAchar;
-    const acharRef = db.collection('acharStrength').doc(id).set({
+    var acharRef = db.collection('acharStrength').doc(id).set({
       productName: productName,
       weightOfAchar: weightOfAchar,
       amountOfAchar: amountOfAchar,

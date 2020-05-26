@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../assets/sass/custom/customButton/customButton.style.scss';
+import '../../assets/sass/custom/customButton/CustomButton.style.scss';
 
 const Submit = props => {
   return (

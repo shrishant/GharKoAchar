@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
-import DeleteButton from '../deleteButton/deleteButton.component';
+import DeleteButton from '../deleteButton/DeleteButton.component';
 
 import { db } from '../../utils/firebase.util';
 
-import '../../assets/sass/custom/card/card.styles.scss';
+import '../../assets/sass/custom/card/Card.style.scss';
 
 class Card extends Component {
   constructor(props) {
     super(props);
-    const { name, number, address, delivaryCharge, Discount, createdDate, acharBought } = props.Cus;
+    var { name, number, address, delivaryCharge, Discount, createdDate, acharBought } = props.Cus;
     this.state = {
       name: name,
       number: number,
@@ -45,7 +45,7 @@ class Card extends Component {
   }
 
   render() {
-    const { number, name, address, delivaryCharge, Discount, acharBought, bought, createdDate, totalCost } = this.state;
+    var { number, name, address, delivaryCharge, Discount, acharBought, bought, createdDate, totalCost } = this.state;
     return (
       <div className={`${this.state.delete === true ? 'cardDelete' : ''} cardContainer`}>
         <h3>{name.toUpperCase()}</h3>

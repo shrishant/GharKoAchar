@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../assets/sass/custom/formInput/formInput.styles.scss';
+import '../../assets/sass/custom/formInput/FormInput.style.scss';
 
 const FormInput = props => {
   return (

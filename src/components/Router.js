@@ -4,9 +4,9 @@ import * as routes from 'constants/routes';
 import PrivateRoute from './common/routes/PrivateRoute';
 import MainPage from './mainPage/mainPage.component';
 import { Router as BrowserRouter, Switch, Route } from 'react-router-dom';
-import Header from './headerComponent/headerComponent.component';
-import EnterUserDetails from './enterUserDetails/enterUserDetails.components';
-import AddStrength from './addStrength/addStrength.components';
+import Header from './headerComponent/HeaderComponent.component';
+import EnterUserDetails from './enterUserDetails/EnterUserDetails.components';
+import AddStrength from './addStrength/AddStrength.component';
 
 import '../assets/css/Main.style.css';
 

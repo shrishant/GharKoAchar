@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import FormInput from '../formInput/formInput.component';
-import CustomButton from '../customButton/customButton.component';
+import FormInput from '../formInput/FormInput.component';
+import CustomButton from '../customButton/CustomButton.component';
 
-import '../../assets/sass/custom/enterUserDetails/enterUserDetails.style.scss';
+import '../../assets/sass/custom/enterUserDetails/EnterUserDetails.style.scss';
 
 import { db, firebase } from '../../utils/firebase.util';
 
@@ -45,8 +45,7 @@ class EnterUserDetails extends Component {
         snapshot.forEach(doc => {
           acharStrengths.push(doc.data());
         });
-        const { name, number, address, delivaryCharge, Discount, createdDate, action, acharBought } = this.state;
-        console.log(acharBought);
+        var { name, number, address, delivaryCharge, Discount, createdDate, action, acharBought } = this.state;
         if (this.state.action === 'edit') {
           for (let i = 0; i < acharBought.length; i++) {
             for (let j = 0; j < acharStrengths.length; j++) {
@@ -59,7 +58,7 @@ class EnterUserDetails extends Component {
         }
 
         //copying amount and name from acharStrength to acharBought
-        acharStrengths.map(acharObject => {
+        acharStrengths.forEach(acharObject => {
           acharBoughts.push({ name: acharObject.id, amount: acharObject.amountOfAchar });
         });
         //this.setState is being used because, we need achars array in the state
@@ -93,7 +92,7 @@ class EnterUserDetails extends Component {
         console.log('Error getting documents', err);
       });
 
-    const { name, number, address, delivaryCharge, Discount, createdDate, acharBought, acharStrength } = this.state;
+    var { name, number, address, delivaryCharge, Discount, createdDate, acharBought, acharStrength } = this.state;
     if (!this.props.match.isExact) {
       //if statement runs when user clicks edit
       this.setState({
@@ -107,8 +106,6 @@ class EnterUserDetails extends Component {
         acharStrength: acharStrength,
         acharBought: acharBought,
       });
-      // const character = Object.assign(this.state, acharBought);
-      // this.setState(character);
     } else {
       //when user adds new value
       this.setState({
@@ -127,13 +124,13 @@ class EnterUserDetails extends Component {
 
   handleUpdate = e => {
     if (this.state.action === 'edit') {
-      this.state.acharStrength.map(ach => {
+      this.state.acharStrength.forEach(ach => {
         if (ach.id === e.target.name) {
           ach.value = e.target.value;
         }
       });
 
-      this.state.acharBought.map(ach => {
+      this.state.acharBought.forEach(ach => {
         if (ach.name === e.target.name) {
           ach.bought = e.target.value;
         }
@@ -145,7 +142,7 @@ class EnterUserDetails extends Component {
         acharBought: this.state.acharBought,
       });
     } else if (this.state.action === 'add') {
-      this.state.acharBought.map(ach => {
+      this.state.acharBought.forEach(ach => {
         if (ach.name === e.target.name) {
           ach.bought = e.target.value;
         }
@@ -159,13 +156,18 @@ class EnterUserDetails extends Component {
     }
   };
 
-  addUser = e => {
-    e.preventDefault();
+  dateTimeForCreate() {
     var today = new Date();
     var date = today.getFullYear() + 'XXX' + (today.getMonth() + 1) + 'AAA' + today.getDate();
     var time = today.getHours() + 'CDE' + today.getMinutes() + '1Do2' + today.getSeconds();
     var dateTimeForCreate = date + '$' + time;
-    const {
+    return dateTimeForCreate;
+  }
+
+  addUser = e => {
+    e.preventDefault();
+    const dateTimeForCreate = this.dateTimeForCreate();
+    var {
       name,
       number,
       address,
@@ -178,7 +180,7 @@ class EnterUserDetails extends Component {
       ...otherprops
     } = this.state;
 
-    const userRef = db.collection('customerDetails').doc(dateTimeForCreate).set({
+    var userRef = db.collection('customerDetails').doc(dateTimeForCreate).set({
       name: name,
       number: number,
       address: address,
@@ -203,7 +205,7 @@ class EnterUserDetails extends Component {
   updateUser = e => {
     e.preventDefault();
     let Ref = db.collection('customerDetails').doc(this.state.createdDate);
-    const {
+    var {
       name,
       number,
       address,
@@ -214,7 +216,7 @@ class EnterUserDetails extends Component {
       createdDate,
       ...otherprops
     } = this.state;
-    let updateSingle = Ref.update({
+    var updateSingle = Ref.update({
       name: name,
       number: number,
       address: address,
