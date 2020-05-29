@@ -32,6 +32,8 @@ class EnterUserDetails extends Component {
       //achar comes from backend, acharStrength.
       acharStrength: [],
       acharBought: acharBought,
+
+      customers: [],
     };
   }
 
@@ -63,6 +65,17 @@ class EnterUserDetails extends Component {
         });
         //this.setState is being used because, we need achars array in the state
         if (this.state.action === 'add') {
+          let customers = [];
+          db.collection('customerDetails')
+            .get()
+            .then(snapshot => {
+              snapshot.forEach(doc => {
+                customers.push(doc.data());
+              });
+            })
+            .catch(err => {
+              console.log('Error getting documents', err);
+            });
           this.setState({
             name: name,
             number: number,
@@ -73,6 +86,7 @@ class EnterUserDetails extends Component {
             action: action,
             acharStrength: acharStrengths,
             acharBought: acharBoughts,
+            customers: customers,
           });
         } else {
           this.setState({
@@ -92,7 +106,17 @@ class EnterUserDetails extends Component {
         console.log('Error getting documents', err);
       });
 
-    var { name, number, address, delivaryCharge, Discount, createdDate, acharBought, acharStrength } = this.state;
+    var {
+      name,
+      number,
+      address,
+      delivaryCharge,
+      Discount,
+      createdDate,
+      acharBought,
+      acharStrength,
+      customers,
+    } = this.state;
     if (!this.props.match.isExact) {
       //if statement runs when user clicks edit
       this.setState({
@@ -118,6 +142,7 @@ class EnterUserDetails extends Component {
         action: 'add',
         acharStrength: acharStrength,
         acharBought: acharBought,
+        customer: customers,
       });
     }
   }
@@ -165,31 +190,59 @@ class EnterUserDetails extends Component {
   }
 
   addUser = e => {
+    let cusDetail = [];
     e.preventDefault();
-    const dateTimeForCreate = this.dateTimeForCreate();
-    var {
-      name,
-      number,
-      address,
-      delivaryCharge,
-      Discount,
-      createdDate,
-      action,
-      acharBought,
-      achar,
-      ...otherprops
-    } = this.state;
-
-    var userRef = db.collection('customerDetails').doc(dateTimeForCreate).set({
-      name: name,
-      number: number,
-      address: address,
-      delivaryCharge: delivaryCharge,
-      Discount: Discount,
-      createdDate: dateTimeForCreate,
-      acharBought: acharBought,
+    this.state.customers.forEach(cus => {
+      if (cus.number == this.state.number) {
+        cusDetail = cus;
+      }
     });
 
+    if (cusDetail.length == 0) {
+      const dateTimeForCreate = this.dateTimeForCreate();
+      var {
+        name,
+        number,
+        address,
+        delivaryCharge,
+        Discount,
+        createdDate,
+        action,
+        acharBought,
+        achar,
+        ...otherprops
+      } = this.state;
+
+      var userRef = db.collection('customerDetails').doc(dateTimeForCreate).set({
+        name: name,
+        number: number,
+        address: address,
+        delivaryCharge: delivaryCharge,
+        Discount: Discount,
+        createdDate: dateTimeForCreate,
+        acharBought: acharBought,
+      });
+    } else {
+      cusDetail.acharBought.forEach(ach => {
+        this.state.acharBought.forEach(SAB => {
+          if (ach.name == SAB.name) {
+            SAB.bought = Number(SAB.bought) + Number(ach.bought);
+          }
+        });
+      });
+
+      let Ref = db.collection('customerDetails').doc(cusDetail.createdDate);
+      var { name, number, address, delivaryCharge, Discount, createdDate } = cusDetail;
+      var updateSingle = Ref.update({
+        name: name,
+        number: number,
+        address: address,
+        delivaryCharge: delivaryCharge,
+        Discount: Discount,
+        createdDate: createdDate,
+        acharBought: this.state.acharBought,
+      });
+    }
     this.setState({
       name: '',
       number: '',
