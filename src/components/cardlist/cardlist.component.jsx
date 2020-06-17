@@ -1,9 +1,9 @@
-import React from 'react';
-import Card from '../card/card.component';
+import React, { Component } from 'react';
+import Card from '../card/Card.component';
 
-import '../../assets/sass/custom/cardlist/cardlist.style.scss';
+import '../../assets/sass/custom/cardList/CardList.style.scss';
 
-const CardList = props => {
+var CardList = props => {
   return (
     <div className="cardList">
       {props.searchedCustomers.map(c => (

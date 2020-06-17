@@ -1,12 +1,13 @@
 .cardContainer {
   display: flex;
   flex-direction: column;
-  background-color: #95dada;
-  border: 3px solid #fff;
+  background-color: #b5c2c7;
+  border: 3px solid #455954;
   border-radius: 5%;
   padding: 10px;
   text-align: left;
   position: relative;
+  line-height: 22px;
 
   .deleteButton {
     position: absolute;
@@ -27,11 +28,20 @@
     color: red;
     cursor: pointer;
   }
+
+  h3 {
+    text-align: center;
+  }
+}
+
+.cardDelete {
+  display: none;
 }
 
 .cardContainer:hover {
-  transform: scale(1.25);
-  background-color: rgba(61, 57, 57, 0.952);
+  transform: scale(1.15);
+  background-color: #565c5e;
+  overflow: hidden;
   .deleteButton {
     display: inline-flex;
   }

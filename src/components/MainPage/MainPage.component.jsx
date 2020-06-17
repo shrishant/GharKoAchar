@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Cardlist from '../cardList/cardList.component';
+import Cardlist from '../cardList/CardList.component';
 import SearchBox from '../searchBox/searchBox.component';
 
-import '../../assets/sass/custom/mainPage/mainPage.style.scss';
+import '../../assets/sass/custom/mainPage/MainPage.style.scss';
 
 import { firebase, db } from '../../utils/firebase.util';
 
@@ -17,7 +17,7 @@ class MainPage extends Component {
 
   componentDidMount() {
     let customers = [];
-    db.collection('users')
+    db.collection('customerDetails')
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
